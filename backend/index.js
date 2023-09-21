@@ -2,7 +2,7 @@ const connectToMongo = require('./db');
 const express = require('express')
 var cors = require('cors') 
 const path=require('path')
-import morgan from "morgan";
+const morgan = require('morgan');
 
 
 
