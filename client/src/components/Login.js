@@ -23,7 +23,7 @@ function Login(props) {
   };
 
   const handleClick = async () => {
-    const response = await fetch("http://localhost:5000/api/auth/login", {
+    const response = await fetch("https://inotebookonline.onrender.com/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
