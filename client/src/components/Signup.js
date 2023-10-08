@@ -20,14 +20,13 @@ function SignUp(props) {
     setErrors((prev) => ({ ...prev, [e.target.name]: "" }));
   };
 
-  const Loading = () => {
+   const Loading = () => {
     return (
-      <div class="spinner-border" role="status">
+      <div class="spinner-border mx-2 px-1" style={{height:"1rem",width:"1rem"}} role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
     );
   };
-
   const handleViewPassword = (e) => {
     if (e.target.id === "password") {
       setCredentials({
