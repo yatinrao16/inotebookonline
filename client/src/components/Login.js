@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Login(props) {
+  const [loading, setLoading] = useState(false);
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
@@ -9,6 +10,14 @@ function Login(props) {
   });
   const [errors, setErrors] = useState({});
   let navigate = useNavigate();
+
+  const Loading = () => {
+    return (
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    );
+  };
 
   const onchange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -23,7 +32,8 @@ function Login(props) {
   };
 
   const handleClick = async () => {
-    const response = await fetch("https://inotebookonlinecloud3.onrender.com/api/auth/login", {
+    setLoading(true);
+    const response = await fetch("http://localhost:5000/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,11 +47,13 @@ function Login(props) {
     console.log(json);
     if (json.success) {
       localStorage.setItem("token", json.authtoken);
+      setLoading(true);
       navigate("/");
       props.showAlert("Logged in successfully", "success");
     } else {
       if (json.error) {
         props.showAlert("Invalid Details! " + json.error, "danger");
+        setLoading(false);
       }
     }
   };
@@ -83,8 +95,8 @@ function Login(props) {
             Password
           </label>
           <i
-            className={`fa fa-eye${
-              credentials.showPassword ? "-slash" : ""
+           className={`fa fa-eye${
+             ! credentials.showPassword ? "-slash" : ""
             } view-password`}
             onClick={handleViewPassword}
           ></i>
@@ -103,13 +115,28 @@ function Login(props) {
         </div>
       </div>
       <div className="text-center">
-        <button className="btn btn-primary" onClick={handleClick}>
-          Login
+        <button
+          type="submit"
+          disabled={
+            credentials.email.length <= 0 ||
+            credentials.password.length <= 0 ||
+            loading
+          }
+          className="inline-flex bg-primary items-center text-white bg-indigo-500 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-700 rounded mx-2"
+          onClick={handleClick}
+        >
+          {loading ? <Loading /> : "Login"}
         </button>
       </div>
       <br />
       <p className="text-center last-para">
-        Don't have an account? <a href="/signup" style={{textDecoration:"none",fontWeight:"bold"}}>SignUp-&gt;</a>{" "}
+        Don't have an account?{" "}
+        <a
+          href="/signup"
+          style={{ textDecoration: "none", fontWeight: "bold" }}
+        >
+          SignUp-&gt;
+        </a>{" "}
       </p>
     </div>
   );
